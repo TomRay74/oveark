@@ -11,29 +11,39 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 ## Levert funksjonalitet
 
 ### Input-panel
-- Tittel og instruksjonstekst (redigerbare, med fornuftige standardverdier)
+- Tittel og instruksjonstekst (redigerbare, med fornuftige standardverdier per språk)
 - Antall øvingskolonner (1–6, default 3)
 - Boksstørrelse i cm (0.8–2.0, default 1.3)
 - **Stil** — tre varianter:
-  - *Bokser*: kryssord-stil, delte kantlinjer
+  - *Bokser*: kryssord-stil med delte kantlinjer (ingen mellomrom)
   - *Understrek*: én bunnlinje per bokstav
-  - *Bare bokstaver*: ingen boks/strek, kun bokstav
+  - *Bare bokstaver*: ingen boks/strek, kun grå bokstav
 - **Bokstavform** — små / STORE / Forbokstav stor
-- **Ord-kolonne** — vis fullt ord / første bokstav (B…) / skjul (viser radnummer)
-- **Sporingsbokstaver** — vis lysegrå Patrick Hand-bokstaver til å spore over
-- **Forside** — legg til forside med nummerert ordliste (2 kolonner) før øvearket
-- **Ordliste** med knapper: *Tilfeldig* (8 tilfeldige ord fra ordbank) / *Lim inn* (clipboard) / *Tøm*
-- **Språkvelger** (Norsk / English) — oversetter hele UI og arket, bytter ordbank automatisk
+- **Ord-kolonne** — vis fullt ord / første bokstav (B…) / skjul (viser radnummer som matcher forsiden)
+- **Sporingsbokstaver** — vis lysegrå Patrick Hand-bokstaver å spore over (fungerer for alle stiler)
+- **Forside** — valgfri forside med nummerert ordliste i 2 kolonner, sideskift ved utskrift/PDF
+- **Ordliste** med knapper:
+  - *Tilfeldig* — 8 tilfeldige ord fra innebygd ordbank (~80 ord per språk)
+  - *Lim inn* — henter fra utklippstavle (Clipboard API)
+  - *Tøm* — nullstiller feltet
+- **Språkvelger** (Norsk / English) — oversetter hele UI og arket, bytter ordbank og standardverdier automatisk
 
 ### Output / ark
-- Live-forhåndsvisning — arket oppdateres uten knappetrykk
-- Forside med ordlisten (valgfri), sideskift ved utskrift
-- Øveark med tabell: ord-kolonne + N øvingskolonner
-- Bokstav-striper i kryssord-stil (delte kantlinjer, ingen mellomrom)
+- Live-forhåndsvisning — oppdateres uten knappetrykk
+- Forside + øveark som separate sider
+- Tabell: ord-kolonne (full / hint / radnummer) + N øvingskolonner
+- Bokstavstriper i kryssord-stil (delte kantlinjer)
 - Sporingsbokstaver i `Patrick Hand`-font (#c8c8c8)
-- Kolonneoverskrifter gjentas automatisk ved sideskift (thead)
-- A4 liggende utskrift via `@page { size: A4 landscape; }`
-- Skjema og knapper skjules ved utskrift (`@media print`)
+- Kolonneoverskrifter gjentas ved sideskift (`<thead>`)
+
+### Eksport
+- **Lagre som PDF** — html2canvas + jsPDF lastet lazy fra CDN ved første klikk (~650 kb). Hvert `.sheet-page`-element blir én PDF-side på A4 liggende. Filnavnet hentes fra tittelen.
+- **Skriv ut** — `window.print()`, A4 liggende via `@page`
+
+### Responsivt design
+- Under 680px: layout stacker vertikalt (kontrollpanel øverst, ark nedenfor)
+- Under 400px: skjemafelt i én kolonne
+- Ark-området scroller horisontalt om innholdet er bredere enn skjermen
 
 ### Persistens
 - Alle innstillinger og ordliste lagres i `localStorage`, overlever sideoppdatering
@@ -42,8 +52,9 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 
 ## Teknisk stack
 
-- **Vanilla HTML + CSS + JavaScript** — ingen byggsteg, ingen npm, ingen avhengigheter
-- **Google Fonts CDN** — `Patrick Hand` for sporingsbokstaver
+- **Vanilla HTML + CSS + JavaScript** — ingen byggsteg, ingen npm
+- **Google Fonts CDN** — `Patrick Hand` for sporingsbokstaver (lastet i `<head>`)
+- **html2canvas + jsPDF** — lastet lazy fra jsDelivr CDN kun ved PDF-eksport
 - Filstruktur: `index.html`, `style.css`, `script.js`
 - Åpnes direkte i nettleser (dobbeltklikk på `index.html`)
 - Publisert via GitHub Pages
@@ -52,32 +63,24 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 
 ## Internasjonalisering (i18n)
 
-`TRANSLATIONS`-objekt i `script.js` med nøkler for alle UI-strenger. Støtter nå:
+`TRANSLATIONS`-objekt i `script.js` med nøkler for alle UI-strenger og ark-strenger. Støtter nå:
 - `no` — Norsk
 - `en` — English
 
-Å legge til nytt språk: legg til én nøkkel i `TRANSLATIONS` og én `<option>` i HTML.
-Hvert språk har også en `wordBank`-array (~80 vanlige ord) for tilfeldig-knappen.
+Å legge til nytt språk (f.eks. Spansk, Tysk): legg til én nøkkel i `TRANSLATIONS` med alle strenger + `wordBank`-array, og én `<option>` i HTML.
 
 ---
 
 ## Neste iterasjon (planlagt)
 
 ### Større ordbanker
-80 ord per språk er for lite for god variasjon. Alternativene:
+Innebygde ordbanker (~80 ord per språk) gir begrenset variasjon. Plan:
 
-**Alternativ A — Statiske filer på GitHub**
-Hoste `words-no.txt`, `words-en.txt` o.l. i repoet. Lastes med `fetch()` ved oppstart
-eller ved første klikk på *Tilfeldig*. Fordel: enkelt, ingen backend. Ulempe: krever
-internettforbindelse (app fungerer i dag offline).
+**Anbefalt: Statiske filer med offline-fallback**
+Hoste `words-no.txt`, `words-en.txt` o.l. i repoet. Lastes med `fetch()` ved oppstart eller ved første klikk på *Tilfeldig*. Faller tilbake til innebygd bank hvis fetch feiler (offline / nettverksfeil).
 
-**Alternativ B — Eksternt API**
-Spørre et API-endepunkt for N tilfeldige ord på gitt språk (f.eks. et enkelt Vercel/
-Cloudflare Worker-endepunkt). Fordel: ubegrenset ordforråd, kan filtrere på lengde/
-nivå. Ulempe: krever backend-drift.
-
-**Anbefalt tilnærming:** Statiske filer (A) med graceful fallback til innebygd ordbank
-hvis fetch feiler. Gir stor forbedring uten infrastruktur-overhead.
+**Alternativ: Eksternt API**
+Vercel/Cloudflare Worker-endepunkt for ubegrenset, filtrerbart ordforråd (lengde, nivå). Krever backend-drift.
 
 ---
 
@@ -90,9 +93,8 @@ hvis fetch feiler. Gir stor forbedring uten infrastruktur-overhead.
 - ✅ A4 landscape, ren utskrift
 - ✅ Norske tegn (æøå) fungerer
 
----
-
 ## Kjente begrensninger
 
-- Tittelen gjentas ikke ved sideskift (kolonneoverskriftene gjør det)
+- Tittelen gjentas ikke ved sideskift i utskrift (kolonneoverskriftene gjør det)
+- PDF-eksport er bildebasert (html2canvas) — tekst er ikke søkbar/kopierbar i PDFen
 - Veldig lange ord (10+ bokstaver) kan kreve mindre boksstørrelse eller færre kolonner

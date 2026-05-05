@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Printable spelling practice worksheet generator for children. Vanilla HTML/CSS/JS — no build step, no npm, no dependencies (except Google Fonts CDN for the tracing font).
+Printable spelling practice worksheet generator for children. Vanilla HTML/CSS/JS — no build step, no npm, no dependencies (except Google Fonts CDN for the tracing font, and html2canvas + jsPDF loaded lazily for PDF export).
 
 Live at: `reiertsen.com/oveark` (GitHub Pages)
 
@@ -17,12 +17,13 @@ Open `index.html` directly in a browser. No server needed.
 Three files, no modules:
 
 - **`index.html`** — structure only. All translatable strings carry `data-i18n="key"` attributes; `script.js` swaps their text on language change. Checkboxes use `change` events; inputs/selects use `input`.
-- **`style.css`** — layout (flex sidebar + main), controls panel, sheet table, letter strip variants, print rules. CSS custom property `--box-size` (set by JS) drives all letter-box sizing. `@media print` hides `.no-print` and sets `@page { size: A4 landscape }`.
+- **`style.css`** — layout (flex sidebar + main), controls panel, sheet table, letter strip variants, responsive breakpoints, print rules. CSS custom property `--box-size` (set by JS) drives all letter-box sizing. `@media print` hides `.no-print` and sets `@page { size: A4 landscape }`.
 - **`script.js`** — all logic. Key sections:
   - `TRANSLATIONS` object — all UI strings + `wordBank` arrays per language (`no`, `en`). Adding a language = one new key here + one `<option>` in HTML.
   - `applyLanguage()` — updates all `[data-i18n]` elements, placeholder, and default title/instruction if still at a known default.
   - `buildCoverPage()` / `buildSheet()` — pure string builders, return HTML injected into `#sheet`.
   - `saveState()` / `loadState()` — full settings persistence via `localStorage`.
+  - `savePDF()` — lazy-loads html2canvas + jsPDF from jsDelivr CDN on first call, captures each `.sheet-page` as a canvas and assembles an A4 landscape PDF.
 
 ## Letter strip styles
 
@@ -69,6 +70,12 @@ Sheet-side strings (column headers, cover subtitle) also go through `t()` inside
   "words": "bord\njord\nfjord"
 }
 ```
+
+## Responsive layout
+
+- **> 680px**: flex row — sticky controls sidebar (280px) + scrollable sheet area
+- **≤ 680px**: flex column — controls full-width on top, sheet below with `overflow-x: auto`
+- **≤ 400px**: form grid switches to single column
 
 ## Planned next: larger word banks
 
