@@ -11,69 +11,78 @@
 <body>
 
   <aside class="controls no-print">
-    <h2>Øveark-generator</h2>
+
+    <div class="lang-row">
+      <select id="lang">
+        <option value="no">Norsk</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <h2 data-i18n="panelTitle">Øveark-generator</h2>
 
     <div class="form-grid">
       <label>
-        Tittel
+        <span data-i18n="labelTitle">Tittel</span>
         <input type="text" id="title" value="Øveark: Rettskriving">
       </label>
       <label>
-        Instruksjon
+        <span data-i18n="labelInstruction">Instruksjon</span>
         <input type="text" id="instruction" value="Skriv én bokstav i hver rute.">
       </label>
       <label>
-        Øvingskolonner
+        <span data-i18n="labelColumns">Øvingskolonner</span>
         <input type="number" id="columns" value="3" min="1" max="6">
       </label>
       <label>
-        Boksstørrelse (cm)
+        <span data-i18n="labelBoxSize">Boksstørrelse (cm)</span>
         <input type="number" id="boxSize" value="1.3" min="0.8" max="2.0" step="0.1">
       </label>
       <label>
-        Stil
+        <span data-i18n="labelStyle">Stil</span>
         <select id="style">
-          <option value="boxes">Bokser</option>
-          <option value="lines">Understrek</option>
-          <option value="bare">Bare bokstaver</option>
+          <option value="boxes" data-i18n="styleBoxes">Bokser</option>
+          <option value="lines" data-i18n="styleLines">Understrek</option>
+          <option value="bare"  data-i18n="styleBare">Bare bokstaver</option>
         </select>
       </label>
       <label>
-        Bokstavform
+        <span data-i18n="labelCase">Bokstavform</span>
         <select id="caseMode">
-          <option value="lower">små bokstaver</option>
-          <option value="upper">STORE BOKSTAVER</option>
-          <option value="title">Forbokstav stor</option>
+          <option value="lower" data-i18n="caseLower">små bokstaver</option>
+          <option value="upper" data-i18n="caseUpper">STORE BOKSTAVER</option>
+          <option value="title" data-i18n="caseTitle">Forbokstav stor</option>
         </select>
       </label>
       <label>
-        Ord-kolonne
+        <span data-i18n="labelWordCol">Ord-kolonne</span>
         <select id="wordCol">
-          <option value="full">Vis fullt ord</option>
-          <option value="hint">Første bokstav (B…)</option>
-          <option value="hidden">Skjul</option>
+          <option value="full"   data-i18n="wordColFull">Vis fullt ord</option>
+          <option value="hint"   data-i18n="wordColHint">Første bokstav (B…)</option>
+          <option value="hidden" data-i18n="wordColHidden">Skjul</option>
         </select>
       </label>
     </div>
 
     <label class="trace-row full-width">
       <input type="checkbox" id="trace">
-      Vis lysegrå bokstaver til å spore over
+      <span data-i18n="traceLabel">Vis lysegrå bokstaver til å spore over</span>
     </label>
     <label class="trace-row full-width">
       <input type="checkbox" id="coverPage">
-      Legg til forside med øveordene
+      <span data-i18n="coverLabel">Legg til forside med øveordene</span>
     </label>
 
     <label class="full-width">
-      Ordliste <span class="hint">(ett ord per linje)</span>
+      <span data-i18n="wordsLabel">Ordliste</span>&nbsp;<span class="hint" data-i18n="wordsHint">(ett ord per linje)</span>
       <textarea id="words" rows="12" placeholder="bord&#10;jord&#10;fjord&#10;ord&#10;hard"></textarea>
     </label>
 
     <div class="buttons">
-      <button id="generateBtn">Generer ark</button>
-      <button id="printBtn" class="secondary">Skriv ut</button>
+      <button id="generateBtn" data-i18n="btnGenerate">Generer ark</button>
+      <button id="printBtn" class="secondary" data-i18n="btnPrint">Skriv ut</button>
     </div>
+
   </aside>
 
   <main id="sheet"></main>
