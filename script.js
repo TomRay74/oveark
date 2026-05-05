@@ -21,8 +21,10 @@ function buildSheet() {
   const instruction = $('instruction').value.trim();
   const cols        = Math.max(1, Math.min(6, parseInt($('columns').value) || 3));
   const boxSize     = parseFloat($('boxSize').value) || 1.3;
-  const useLines    = $('style').value === 'lines';
-  const traceMode   = $('trace').checked;
+  const styleVal    = $('style').value;
+  const useLines    = styleVal === 'lines';
+  const useBare     = styleVal === 'bare';
+  const traceMode   = $('trace').checked || useBare;
   const caseMode    = $('caseMode').value;
 
   const words = $('words').value
@@ -44,7 +46,7 @@ function buildSheet() {
   const rows = words.map(word => {
     const displayWord = applyCase(word, caseMode);
     const cellClass   = useLines ? 'letter-strip lines' : 'letter-strip';
-    const boxEl       = useLines ? 'letter-line' : 'letter-box';
+    const boxEl       = useLines ? 'letter-line' : useBare ? 'letter-bare' : 'letter-box';
     const letters     = [...displayWord];
 
     const strip = letters.map(letter => {

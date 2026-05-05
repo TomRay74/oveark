@@ -200,6 +200,16 @@ main#sheet {
   margin-bottom: 2px;
 }
 
+/* Bare letters style */
+.letter-bare {
+  width: var(--box-size);
+  height: var(--box-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 /* Underscore / line style */
 .letter-strip.lines {
   gap: 0.2cm;
