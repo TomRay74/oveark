@@ -27,6 +27,7 @@ const TRANSLATIONS = {
     wordsLabel:          'Ordliste',
     wordsHint:           '(ett ord per linje)',
     wordsPlaceholder:    'bord\njord\nfjord\nord\nhard',
+    btnRandom:           'Tilfeldig',
     btnPaste:            'Lim inn',
     btnClear:            'Tøm',
     btnGenerate:         'Generer ark',
@@ -36,6 +37,17 @@ const TRANSLATIONS = {
     sheetWordHeader:     'Ord',
     sheetPractice:       'Øving',
     coverSubtitle:       'Øveord',
+    wordBank: [
+      'hus', 'bil', 'hund', 'katt', 'mat', 'sol', 'regn', 'vind', 'snø', 'dag',
+      'natt', 'bok', 'rom', 'dør', 'stol', 'bord', 'seng', 'glass', 'brød', 'melk',
+      'egg', 'ost', 'fisk', 'eple', 'banan', 'sko', 'jakke', 'bukse', 'lue', 'sokk',
+      'penn', 'ball', 'sang', 'dans', 'hoppe', 'løpe', 'lese', 'skrive', 'tegne',
+      'smile', 'lære', 'skole', 'leke', 'kopp', 'kniv', 'gaffel', 'suppe', 'kake',
+      'blomst', 'fugl', 'tre', 'gress', 'fjell', 'elv', 'sjø', 'hav', 'stein',
+      'sky', 'stjerne', 'måne', 'båt', 'tog', 'buss', 'gate', 'hjem', 'by',
+      'venn', 'barn', 'søster', 'bror', 'mor', 'far', 'sykkel', 'vindu', 'tallerken',
+      'synge', 'danse', 'hjelpe', 'tenke', 'huske', 'verden', 'time', 'uke', 'år',
+    ],
   },
   en: {
     panelTitle:          'Worksheet Generator',
@@ -60,6 +72,7 @@ const TRANSLATIONS = {
     wordsLabel:          'Word list',
     wordsHint:           '(one word per line)',
     wordsPlaceholder:    'table\nchair\nfloor\nword\nhard',
+    btnRandom:           'Random',
     btnPaste:            'Paste',
     btnClear:            'Clear',
     btnGenerate:         'Generate sheet',
@@ -69,6 +82,17 @@ const TRANSLATIONS = {
     sheetWordHeader:     'Word',
     sheetPractice:       'Practice',
     coverSubtitle:       'Practice words',
+    wordBank: [
+      'cat', 'dog', 'house', 'car', 'book', 'sun', 'rain', 'wind', 'snow', 'day',
+      'night', 'door', 'chair', 'table', 'bed', 'glass', 'bread', 'milk', 'egg',
+      'fish', 'apple', 'shoe', 'coat', 'pants', 'hat', 'sock', 'pen', 'ball',
+      'song', 'dance', 'jump', 'run', 'read', 'write', 'draw', 'smile', 'learn',
+      'school', 'play', 'cup', 'knife', 'fork', 'soup', 'cake', 'flower', 'bird',
+      'tree', 'grass', 'hill', 'river', 'lake', 'sea', 'stone', 'cloud', 'star',
+      'moon', 'boat', 'train', 'bus', 'street', 'home', 'town', 'friend', 'child',
+      'sister', 'brother', 'mother', 'father', 'bike', 'window', 'plate', 'sing',
+      'help', 'think', 'world', 'time', 'week', 'year', 'light', 'dark', 'name',
+    ],
   },
 };
 
@@ -242,6 +266,14 @@ $('lang').addEventListener('change', () => {
 
 ['trace', 'coverPage'].forEach(id => {
   $(id).addEventListener('change', () => { buildSheet(); saveState(); });
+});
+
+$('randomBtn').addEventListener('click', () => {
+  const bank     = TRANSLATIONS[$('lang').value].wordBank;
+  const shuffled = [...bank].sort(() => Math.random() - 0.5);
+  $('words').value = shuffled.slice(0, 8).join('\n');
+  buildSheet();
+  saveState();
 });
 
 $('clearBtn').addEventListener('click', () => {
