@@ -256,6 +256,7 @@ function loadState() {
 /* ── Event listeners ── */
 $('lang').addEventListener('change', () => {
   applyLanguage();
+  fillRandomWords();
   buildSheet();
   saveState();
 });
@@ -268,10 +269,13 @@ $('lang').addEventListener('change', () => {
   $(id).addEventListener('change', () => { buildSheet(); saveState(); });
 });
 
+function fillRandomWords() {
+  const bank = TRANSLATIONS[$('lang').value].wordBank;
+  $('words').value = [...bank].sort(() => Math.random() - 0.5).slice(0, 8).join('\n');
+}
+
 $('randomBtn').addEventListener('click', () => {
-  const bank     = TRANSLATIONS[$('lang').value].wordBank;
-  const shuffled = [...bank].sort(() => Math.random() - 0.5);
-  $('words').value = shuffled.slice(0, 8).join('\n');
+  fillRandomWords();
   buildSheet();
   saveState();
 });
