@@ -36,7 +36,7 @@ function buildSheet() {
   const styleVal    = $('style').value;
   const useLines    = styleVal === 'lines';
   const useBare     = styleVal === 'bare';
-  const traceMode   = useBare || $('trace').checked;
+  const traceMode   = $('trace').checked;
   const caseMode    = $('caseMode').value;
   const wordCol     = $('wordCol').value;
   const showCover   = $('coverPage').checked;
@@ -66,9 +66,12 @@ function buildSheet() {
     const letters     = [...displayWord];
 
     const strip = letters.map(letter => {
-      const inner = traceMode
-        ? `<span class="trace-letter">${escapeHtml(letter)}</span>`
-        : '';
+      let inner = '';
+      if (traceMode) {
+        inner = `<span class="trace-letter">${escapeHtml(letter)}</span>`;
+      } else if (useBare) {
+        inner = `<span class="bare-letter">${escapeHtml(letter)}</span>`;
+      }
       return `<div class="${boxEl}">${inner}</div>`;
     }).join('');
 
@@ -134,15 +137,8 @@ function loadState() {
   if (data.words       != null) $('words').value       = data.words;
 }
 
-function updateTraceAvailability() {
-  const isBare = $('style').value === 'bare';
-  const cb     = $('trace');
-  cb.disabled  = isBare;
-  cb.closest('label').style.opacity = isBare ? '0.4' : '1';
-}
-
 ['title', 'instruction', 'columns', 'boxSize', 'style', 'caseMode', 'wordCol', 'words'].forEach(id => {
-  $(id).addEventListener('input', () => { updateTraceAvailability(); buildSheet(); saveState(); });
+  $(id).addEventListener('input', () => { buildSheet(); saveState(); });
 });
 
 ['trace', 'coverPage'].forEach(id => {
@@ -153,5 +149,4 @@ $('generateBtn').addEventListener('click', () => { buildSheet(); saveState(); })
 $('printBtn').addEventListener('click', () => window.print());
 
 loadState();
-updateTraceAvailability();
 buildSheet();

@@ -242,6 +242,15 @@ main#sheet {
   margin-bottom: 2px;
 }
 
+.bare-letter {
+  font-family: 'Patrick Hand', cursive;
+  color: #222;
+  font-size: calc(var(--box-size) * 0.72);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
 /* Bare letters style */
 .letter-bare {
   width: var(--box-size);
