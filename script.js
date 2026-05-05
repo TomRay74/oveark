@@ -30,6 +30,7 @@ const TRANSLATIONS = {
     btnRandom:           'Tilfeldig',
     btnPaste:            'Lim inn',
     btnClear:            'Tøm',
+    btnPDF:              'Lagre som PDF',
     btnGenerate:         'Generer ark',
     btnPrint:            'Skriv ut',
     defaultTitle:        'Øveark: Rettskriving',
@@ -75,6 +76,7 @@ const TRANSLATIONS = {
     btnRandom:           'Random',
     btnPaste:            'Paste',
     btnClear:            'Clear',
+    btnPDF:              'Save as PDF',
     btnGenerate:         'Generate sheet',
     btnPrint:            'Print',
     defaultTitle:        'Worksheet: Spelling',
@@ -297,7 +299,51 @@ $('pasteBtn').addEventListener('click', async () => {
   }
 });
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function savePDF() {
+  const btn = $('pdfBtn');
+  btn.disabled = true;
+  btn.textContent = '…';
+
+  if (!window.html2canvas) {
+    await loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf   = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const pages = document.querySelectorAll('.sheet-page');
+
+  for (let i = 0; i < pages.length; i++) {
+    const canvas = await html2canvas(pages[i], {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      logging: false,
+    });
+    const imgH = (canvas.height / canvas.width) * pageW;
+    if (i > 0) pdf.addPage();
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageW, Math.min(imgH, pageH));
+  }
+
+  const filename = ($('title').value.trim() || 'øveark').replace(/[^\w\sæøåÆØÅ-]/g, '') + '.pdf';
+  pdf.save(filename);
+
+  btn.disabled = false;
+  btn.textContent = t('btnPDF');
+}
+
 $('generateBtn').addEventListener('click', () => { buildSheet(); saveState(); });
+$('pdfBtn').addEventListener('click', savePDF);
 $('printBtn').addEventListener('click', () => window.print());
 
 /* ── Init ── */
