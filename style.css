@@ -157,6 +157,7 @@ button.secondary:hover { background: #4b5563; }
 main#sheet {
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
 }
 
 /* ── Sheet page ── */
@@ -165,6 +166,7 @@ main#sheet {
   padding: 1.5cm;
   box-shadow: 0 2px 8px rgba(0,0,0,.15);
   max-width: 29.7cm;
+  min-width: fit-content;
 }
 
 .sheet-page h1 {
