@@ -53,13 +53,11 @@ function buildSheet() {
     return;
   }
 
-  const showWordCol = wordCol !== 'hidden';
-
   const headerCells = Array.from({ length: cols }, (_, i) =>
     `<th>Øving ${i + 1}</th>`
   ).join('');
 
-  const rows = words.map(word => {
+  const rows = words.map((word, index) => {
     const displayWord = applyCase(word, caseMode);
     const cellClass   = useLines ? 'letter-strip lines' : 'letter-strip';
     const boxEl       = useLines ? 'letter-line' : useBare ? 'letter-bare' : 'letter-box';
@@ -76,18 +74,22 @@ function buildSheet() {
       `<td class="practice-cell"><div class="${cellClass}">${strip}</div></td>`
     ).join('');
 
-    let wordCell = '';
+    let wordCell;
     if (wordCol === 'full') {
       wordCell = `<td class="word-cell"><strong>${escapeHtml(displayWord)}</strong></td>`;
     } else if (wordCol === 'hint') {
       const hint = escapeHtml([...displayWord][0]) + '…';
       wordCell = `<td class="word-cell"><strong>${hint}</strong></td>`;
+    } else {
+      wordCell = `<td class="word-cell number-cell"><strong>${index + 1}.</strong></td>`;
     }
 
     return `<tr>${wordCell}${practiceCells}</tr>`;
   }).join('');
 
-  const wordHeader = showWordCol ? `<th class="word-col">Ord</th>` : '';
+  const wordHeader = wordCol === 'hidden'
+    ? `<th class="word-col number-col">#</th>`
+    : `<th class="word-col">Ord</th>`;
 
   const practiceSheet = `
     <div class="sheet-page">

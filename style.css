@@ -207,6 +207,7 @@ main#sheet {
 
 .word-col { text-align: left; white-space: nowrap; }
 .word-cell { text-align: left; white-space: nowrap; }
+.number-col, .number-cell { text-align: center; width: 1%; }
 
 /* ── Letter strip (crossword style) ── */
 .letter-strip {
