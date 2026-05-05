@@ -66,12 +66,9 @@ function buildSheet() {
     const letters     = [...displayWord];
 
     const strip = letters.map(letter => {
-      let inner = '';
-      if (traceMode) {
-        inner = `<span class="trace-letter">${escapeHtml(letter)}</span>`;
-      } else if (useBare) {
-        inner = `<span class="bare-letter">${escapeHtml(letter)}</span>`;
-      }
+      const inner = traceMode
+        ? `<span class="trace-letter">${escapeHtml(letter)}</span>`
+        : '';
       return `<div class="${boxEl}">${inner}</div>`;
     }).join('');
 
