@@ -105,6 +105,33 @@ textarea {
 
 input[type="number"] { max-width: 80px; }
 
+.words-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.words-actions {
+  display: flex;
+  gap: .25rem;
+  flex-shrink: 0;
+}
+
+.words-actions button {
+  font-size: .7rem;
+  padding: .15rem .45rem;
+  background: none;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.words-actions button:hover {
+  background: #f0f0f0;
+  border-color: #aaa;
+  color: #222;
+}
+
 textarea { resize: vertical; font-size: .9rem; line-height: 1.5; }
 
 .hint { font-weight: 400; color: #888; }

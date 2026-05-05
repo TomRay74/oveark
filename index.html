@@ -74,7 +74,13 @@
     </label>
 
     <label class="full-width">
-      <span data-i18n="wordsLabel">Ordliste</span>&nbsp;<span class="hint" data-i18n="wordsHint">(ett ord per linje)</span>
+      <div class="words-header">
+        <span><span data-i18n="wordsLabel">Ordliste</span>&nbsp;<span class="hint" data-i18n="wordsHint">(ett ord per linje)</span></span>
+        <div class="words-actions">
+          <button type="button" id="pasteBtn" data-i18n="btnPaste">Lim inn</button>
+          <button type="button" id="clearBtn" data-i18n="btnClear">Tøm</button>
+        </div>
+      </div>
       <textarea id="words" rows="12" placeholder="bord&#10;jord&#10;fjord&#10;ord&#10;hard"></textarea>
     </label>
 

@@ -27,6 +27,8 @@ const TRANSLATIONS = {
     wordsLabel:          'Ordliste',
     wordsHint:           '(ett ord per linje)',
     wordsPlaceholder:    'bord\njord\nfjord\nord\nhard',
+    btnPaste:            'Lim inn',
+    btnClear:            'Tøm',
     btnGenerate:         'Generer ark',
     btnPrint:            'Skriv ut',
     defaultTitle:        'Øveark: Rettskriving',
@@ -58,6 +60,8 @@ const TRANSLATIONS = {
     wordsLabel:          'Word list',
     wordsHint:           '(one word per line)',
     wordsPlaceholder:    'table\nchair\nfloor\nword\nhard',
+    btnPaste:            'Paste',
+    btnClear:            'Clear',
     btnGenerate:         'Generate sheet',
     btnPrint:            'Print',
     defaultTitle:        'Worksheet: Spelling',
@@ -238,6 +242,23 @@ $('lang').addEventListener('change', () => {
 
 ['trace', 'coverPage'].forEach(id => {
   $(id).addEventListener('change', () => { buildSheet(); saveState(); });
+});
+
+$('clearBtn').addEventListener('click', () => {
+  $('words').value = '';
+  buildSheet();
+  saveState();
+});
+
+$('pasteBtn').addEventListener('click', async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    $('words').value = text;
+    buildSheet();
+    saveState();
+  } catch {
+    $('words').focus();
+  }
 });
 
 $('generateBtn').addEventListener('click', () => { buildSheet(); saveState(); });
