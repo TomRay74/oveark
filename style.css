@@ -55,6 +55,24 @@ label {
 
 label.full-width { margin-bottom: .75rem; }
 
+.trace-row {
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .75rem;
+  cursor: pointer;
+  font-size: .85rem;
+  color: #444;
+  font-weight: 400;
+}
+
+.trace-row input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
 input[type="text"],
 input[type="number"],
 textarea {
@@ -158,6 +176,28 @@ main#sheet {
 
 .letter-box:last-child {
   border-right: var(--border);
+}
+
+/* Trace letters */
+.letter-box, .letter-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trace-letter {
+  font-family: 'Patrick Hand', cursive;
+  color: #c8c8c8;
+  font-size: calc(var(--box-size) * 0.72);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.letter-line .trace-letter {
+  align-self: flex-end;
+  margin-bottom: 2px;
 }
 
 /* Underscore / line style */

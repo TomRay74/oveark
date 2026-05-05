@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Øveark-generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -35,7 +37,20 @@
           <option value="lines">Understrek</option>
         </select>
       </label>
+      <label>
+        Bokstavform
+        <select id="caseMode">
+          <option value="lower">små bokstaver</option>
+          <option value="upper">STORE BOKSTAVER</option>
+          <option value="title">Forbokstav stor</option>
+        </select>
+      </label>
     </div>
+
+    <label class="trace-row full-width">
+      <input type="checkbox" id="trace">
+      Vis lysegrå bokstaver til å spore over
+    </label>
 
     <label class="full-width">
       Ordliste <span class="hint">(ett ord per linje)</span>

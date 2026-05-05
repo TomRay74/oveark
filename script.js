@@ -2,6 +2,12 @@ const STORAGE_KEY = 'oveark_v1';
 
 const $ = id => document.getElementById(id);
 
+function applyCase(word, mode) {
+  if (mode === 'upper') return word.toUpperCase();
+  if (mode === 'title') return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  return word.toLowerCase();
+}
+
 function escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -16,6 +22,8 @@ function buildSheet() {
   const cols        = Math.max(1, Math.min(6, parseInt($('columns').value) || 3));
   const boxSize     = parseFloat($('boxSize').value) || 1.3;
   const useLines    = $('style').value === 'lines';
+  const traceMode   = $('trace').checked;
+  const caseMode    = $('caseMode').value;
 
   const words = $('words').value
     .split('\n')
@@ -34,18 +42,24 @@ function buildSheet() {
   ).join('');
 
   const rows = words.map(word => {
-    const cellClass = useLines ? 'letter-strip lines' : 'letter-strip';
-    const boxEl     = useLines ? 'letter-line' : 'letter-box';
-    const strip     = Array.from({ length: word.length }, () =>
-      `<div class="${boxEl}"></div>`
-    ).join('');
+    const displayWord = applyCase(word, caseMode);
+    const cellClass   = useLines ? 'letter-strip lines' : 'letter-strip';
+    const boxEl       = useLines ? 'letter-line' : 'letter-box';
+    const letters     = [...displayWord];
+
+    const strip = letters.map(letter => {
+      const inner = traceMode
+        ? `<span class="trace-letter">${escapeHtml(letter)}</span>`
+        : '';
+      return `<div class="${boxEl}">${inner}</div>`;
+    }).join('');
 
     const practiceCells = Array.from({ length: cols }, () =>
       `<td class="practice-cell"><div class="${cellClass}">${strip}</div></td>`
     ).join('');
 
     return `<tr>
-      <td class="word-cell"><strong>${escapeHtml(word)}</strong></td>
+      <td class="word-cell"><strong>${escapeHtml(displayWord)}</strong></td>
       ${practiceCells}
     </tr>`;
   }).join('');
@@ -73,6 +87,8 @@ function saveState() {
     columns:     $('columns').value,
     boxSize:     $('boxSize').value,
     style:       $('style').value,
+    caseMode:    $('caseMode').value,
+    trace:       $('trace').checked,
     words:       $('words').value,
   }));
 }
@@ -85,13 +101,17 @@ function loadState() {
   if (data.columns     != null) $('columns').value     = data.columns;
   if (data.boxSize     != null) $('boxSize').value     = data.boxSize;
   if (data.style       != null) $('style').value       = data.style;
+  if (data.caseMode    != null) $('caseMode').value    = data.caseMode;
+  if (data.trace       != null) $('trace').checked     = data.trace;
   if (data.words       != null) $('words').value       = data.words;
 }
 
 // Live preview + autosave on every input
-['title', 'instruction', 'columns', 'boxSize', 'style', 'words'].forEach(id => {
+['title', 'instruction', 'columns', 'boxSize', 'style', 'caseMode', 'words'].forEach(id => {
   $(id).addEventListener('input', () => { buildSheet(); saveState(); });
 });
+
+$('trace').addEventListener('change', () => { buildSheet(); saveState(); });
 
 $('generateBtn').addEventListener('click', () => { buildSheet(); saveState(); });
 $('printBtn').addEventListener('click', () => window.print());
