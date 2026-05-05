@@ -44,6 +44,10 @@ body {
   margin-bottom: .75rem;
 }
 
+.form-grid label {
+  min-width: 0;
+}
+
 label {
   display: flex;
   flex-direction: column;
@@ -75,6 +79,7 @@ label.full-width { margin-bottom: .75rem; }
 
 input[type="text"],
 input[type="number"],
+select,
 textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
