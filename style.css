@@ -312,6 +312,40 @@ main#sheet {
 }
 
 /* ── Print ── */
+/* ── Mobile layout ── */
+@media (max-width: 680px) {
+  body {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .controls {
+    width: 100%;
+    position: static;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  main#sheet {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  .sheet-page {
+    min-width: fit-content;
+  }
+}
+
+@media (max-width: 400px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Print ── */
 @media print {
   .no-print { display: none !important; }
 
