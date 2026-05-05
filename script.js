@@ -15,6 +15,7 @@ function buildSheet() {
   const instruction = $('instruction').value.trim();
   const cols        = Math.max(1, Math.min(6, parseInt($('columns').value) || 3));
   const boxSize     = parseFloat($('boxSize').value) || 1.3;
+  const useLines    = $('style').value === 'lines';
 
   const words = $('words').value
     .split('\n')
@@ -33,12 +34,14 @@ function buildSheet() {
   ).join('');
 
   const rows = words.map(word => {
-    const strip = Array.from({ length: word.length }, () =>
-      `<div class="letter-box"></div>`
+    const cellClass = useLines ? 'letter-strip lines' : 'letter-strip';
+    const boxEl     = useLines ? 'letter-line' : 'letter-box';
+    const strip     = Array.from({ length: word.length }, () =>
+      `<div class="${boxEl}"></div>`
     ).join('');
 
     const practiceCells = Array.from({ length: cols }, () =>
-      `<td class="practice-cell"><div class="letter-strip">${strip}</div></td>`
+      `<td class="practice-cell"><div class="${cellClass}">${strip}</div></td>`
     ).join('');
 
     return `<tr>
@@ -69,6 +72,7 @@ function saveState() {
     instruction: $('instruction').value,
     columns:     $('columns').value,
     boxSize:     $('boxSize').value,
+    style:       $('style').value,
     words:       $('words').value,
   }));
 }
@@ -80,11 +84,12 @@ function loadState() {
   if (data.instruction != null) $('instruction').value = data.instruction;
   if (data.columns     != null) $('columns').value     = data.columns;
   if (data.boxSize     != null) $('boxSize').value     = data.boxSize;
+  if (data.style       != null) $('style').value       = data.style;
   if (data.words       != null) $('words').value       = data.words;
 }
 
 // Live preview + autosave on every input
-['title', 'instruction', 'columns', 'boxSize', 'words'].forEach(id => {
+['title', 'instruction', 'columns', 'boxSize', 'style', 'words'].forEach(id => {
   $(id).addEventListener('input', () => { buildSheet(); saveState(); });
 });
 

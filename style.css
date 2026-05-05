@@ -160,6 +160,18 @@ main#sheet {
   border-right: var(--border);
 }
 
+/* Underscore / line style */
+.letter-strip.lines {
+  gap: 0.2cm;
+}
+
+.letter-line {
+  width: var(--box-size);
+  height: var(--box-size);
+  border-bottom: 2px solid #111;
+  flex-shrink: 0;
+}
+
 /* ── Print ── */
 @media print {
   .no-print { display: none !important; }
