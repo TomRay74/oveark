@@ -60,12 +60,19 @@
       const status = document.getElementById('status');
       const list   = document.getElementById('list');
       try {
+        const countRes = await fetch(
+          'https://api.github.com/repos/TomRay74/oveark/commits?per_page=1'
+        );
+        if (!countRes.ok) throw new Error(countRes.status);
+        const countLink = countRes.headers.get('Link') || '';
+        const countMatch = countLink.match(/page=(\d+)>; rel="last"/);
+        const total = countMatch ? parseInt(countMatch[1]) : 1;
+
         const res = await fetch(
           'https://api.github.com/repos/TomRay74/oveark/commits?per_page=100'
         );
         if (!res.ok) throw new Error(res.status);
         const commits = await res.json();
-        const total = commits.length;
         status.style.display = 'none';
         commits.forEach((c, i) => {
           const version = 'v1.0.' + (total - 1 - i);
@@ -79,6 +86,12 @@
             `<span class="date">${date}</span>`;
           list.appendChild(el);
         });
+        if (total > 100) {
+          const note = document.createElement('p');
+          note.style.cssText = 'text-align:center;color:#aaa;font-size:.8rem;margin-top:.75rem';
+          note.textContent = `Viser de siste 100 av ${total} commits.`;
+          list.appendChild(note);
+        }
       } catch {
         status.className = 'error';
         status.textContent = 'Kunne ikke hente versjonslogg. Sjekk nettverkstilgang.';

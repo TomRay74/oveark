@@ -266,9 +266,8 @@ function loadState() {
 /* ── Event listeners ── */
 $('lang').addEventListener('change', () => {
   applyLanguage();
-  const currentWords = $('words').value.trim().split('\n').map(w => w.trim()).filter(Boolean);
-  const allBankWords = new Set(Object.values(TRANSLATIONS).flatMap(tr => tr.wordBank));
-  if (currentWords.length === 0 || currentWords.every(w => allBankWords.has(w))) {
+  const current = $('words').value;
+  if (current.trim() === '' || current === lastRandomWords) {
     fillRandomWords();
   }
   buildSheet();
@@ -283,9 +282,12 @@ $('lang').addEventListener('change', () => {
   $(id).addEventListener('change', () => { buildSheet(); saveState(); });
 });
 
+let lastRandomWords = '';
+
 function fillRandomWords() {
   const bank = TRANSLATIONS[$('lang').value].wordBank;
-  $('words').value = [...bank].sort(() => Math.random() - 0.5).slice(0, 8).join('\n');
+  lastRandomWords = [...bank].sort(() => Math.random() - 0.5).slice(0, 8).join('\n');
+  $('words').value = lastRandomWords;
 }
 
 $('randomBtn').addEventListener('click', () => {
@@ -374,6 +376,7 @@ async function initVersion() {
     let v = sessionStorage.getItem('oveark_version');
     if (!v) {
       const res = await fetch('https://api.github.com/repos/TomRay74/oveark/commits?per_page=1');
+      if (!res.ok) throw new Error(res.status);
       const link = res.headers.get('Link') || '';
       const m = link.match(/page=(\d+)>; rel="last"/);
       const count = m ? parseInt(m[1]) : 1;
