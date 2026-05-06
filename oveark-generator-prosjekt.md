@@ -17,7 +17,7 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 - **Stil** — tre varianter:
   - *Bokser*: kryssord-stil med delte kantlinjer (ingen mellomrom)
   - *Understrek*: én bunnlinje per bokstav
-  - *Bare bokstaver*: ingen boks/strek, kun grå bokstav
+  - *Bare bokstaver*: ingen boks/strek, kun grå bokstav; bokstaver står tett (naturlig tekstletterspacing)
 - **Bokstavform** — små / STORE / Forbokstav stor
 - **Ord-kolonne** — vis fullt ord / første bokstav (B…) / skjul (viser radnummer som matcher forsiden)
 - **Sporingsbokstaver** — vis lysegrå Patrick Hand-bokstaver å spore over (fungerer for alle stiler)

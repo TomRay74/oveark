@@ -29,11 +29,11 @@ Three files, no modules:
 
 Three style modes controlled by `$('style').value`:
 
-| Value | Element class | Border behaviour |
-|-------|--------------|-----------------|
-| `boxes` | `.letter-box` | All four borders; `border-right: none` on all-but-last (crossword flush) |
-| `lines` | `.letter-line` | Bottom border only; `gap: 0.2cm` between letters |
-| `bare` | `.letter-bare` | No borders; letter always gray (`trace-letter`) when trace on, empty when off |
+| Value | Strip class | Element class | Border behaviour |
+|-------|-------------|--------------|-----------------|
+| `boxes` | `letter-strip` | `.letter-box` | All four borders; `border-right: none` on all-but-last (crossword flush) |
+| `lines` | `letter-strip lines` | `.letter-line` | Bottom border only; `gap: 0.2cm` between letters |
+| `bare` | `letter-strip bare` | `.letter-bare` | No borders; `gap: 0`; `width: auto` (shrinks to glyph width); `min-width: 0.55 × --box-size` keeps writing space when trace is off |
 
 Trace mode (`$('trace').checked`) injects `<span class="trace-letter">` inside each element; font is `Patrick Hand` at `0.72 × --box-size`.
 
