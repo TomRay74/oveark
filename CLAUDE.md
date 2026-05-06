@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Printable spelling practice worksheet generator for children. Vanilla HTML/CSS/JS — no build step, no npm, no dependencies (except Google Fonts CDN for the tracing font, and html2canvas + jsPDF loaded lazily for PDF export).
 
-Live at: `reiertsen.com/oveark` (GitHub Pages)
+Live at: `https://reiertsen.com/oveark` (GitHub Pages)
 
 ## Running
 
@@ -22,8 +22,8 @@ Three files, no modules:
   - `TRANSLATIONS` object — all UI strings + `wordBank` arrays per language (`no`, `en`). Adding a language = one new key here + one `<option>` in HTML.
   - `applyLanguage()` — updates all `[data-i18n]` elements, placeholder, and default title/instruction if still at a known default.
   - `buildCoverPage()` / `buildSheet()` — pure string builders, return HTML injected into `#sheet`.
-  - `saveState()` / `loadState()` — full settings persistence via `localStorage`.
-  - `savePDF()` — lazy-loads html2canvas + jsPDF from jsDelivr CDN on first call, captures each `.sheet-page` as a canvas and assembles an A4 landscape PDF.
+  - `saveState()` / `loadState()` — full settings persistence via `localStorage`. `loadState` wraps `JSON.parse` in try/catch and clears corrupt entries.
+  - `savePDF()` — lazy-loads html2canvas + jsPDF from jsDelivr CDN on first call, captures each `.sheet-page` as a canvas and assembles an A4 landscape PDF. Wrapped in try/finally — button always re-enables; errors shown in button text for 3 s.
 
 ## Letter strip styles
 
@@ -51,7 +51,11 @@ document.querySelectorAll('[data-i18n]').forEach(el => {
 });
 ```
 
-Sheet-side strings (column headers, cover subtitle) also go through `t()` inside `buildSheet()`.
+Sheet-side strings (column headers, cover subtitle) also go through `t()` inside `buildSheet()`. The `pdfError` key is used by `savePDF()` to display an inline error message.
+
+## Language switching
+
+The `lang` change listener calls `fillRandomWords()` only if the word list is empty or every word exists in a known `wordBank` (any language). User-typed or pasted words are preserved.
 
 ## State shape (localStorage)
 
@@ -76,6 +80,10 @@ Sheet-side strings (column headers, cover subtitle) also go through `t()` inside
 - **> 680px**: flex row — sticky controls sidebar (280px) + scrollable sheet area
 - **≤ 680px**: flex column — controls full-width on top, sheet below with `overflow-x: auto`
 - **≤ 400px**: form grid switches to single column
+
+## Analytics
+
+GoatCounter (anonymous, no cookies) loaded via `https://gc.zgo.at/count.js`. Stats at `https://tomray74.goatcounter.com`. A redirect page at `stat/index.html` sends visitors there from `/oveark/stat/`.
 
 ## Planned next: larger word banks
 
