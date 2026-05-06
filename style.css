@@ -290,8 +290,13 @@ main#sheet {
 }
 
 /* Bare letters style */
+.letter-strip.bare {
+  gap: 0;
+}
+
 .letter-bare {
-  width: var(--box-size);
+  width: auto;
+  min-width: calc(var(--box-size) * 0.55);
   height: var(--box-size);
   display: flex;
   align-items: center;

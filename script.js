@@ -175,7 +175,7 @@ function buildSheet() {
 
   const rows = words.map((word, index) => {
     const displayWord = applyCase(word, caseMode);
-    const cellClass   = useLines ? 'letter-strip lines' : 'letter-strip';
+    const cellClass   = useLines ? 'letter-strip lines' : useBare ? 'letter-strip bare' : 'letter-strip';
     const boxEl       = useLines ? 'letter-line' : useBare ? 'letter-bare' : 'letter-box';
     const letters     = [...displayWord];
 
