@@ -368,3 +368,22 @@ $('printBtn').addEventListener('click', () => window.print());
 loadState();
 applyLanguage();
 buildSheet();
+
+async function initVersion() {
+  try {
+    let v = sessionStorage.getItem('oveark_version');
+    if (!v) {
+      const res = await fetch('https://api.github.com/repos/TomRay74/oveark/commits?per_page=1');
+      const link = res.headers.get('Link') || '';
+      const m = link.match(/page=(\d+)>; rel="last"/);
+      const count = m ? parseInt(m[1]) : 1;
+      v = 'v1.0.' + (count - 1);
+      sessionStorage.setItem('oveark_version', v);
+    }
+    $('versionLink').textContent = v;
+  } catch {
+    const el = $('versionLink');
+    if (el) el.style.display = 'none';
+  }
+}
+initVersion();

@@ -138,6 +138,10 @@ textarea { resize: vertical; font-size: .9rem; line-height: 1.5; }
 
 .buttons { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .25rem; }
 
+.version-row { margin-top: auto; padding-top: .75rem; text-align: center; }
+.version-row a { font-size: .75rem; color: #aaa; text-decoration: none; }
+.version-row a:hover { color: #555; }
+
 button {
   padding: .45rem 1rem;
   border: none;

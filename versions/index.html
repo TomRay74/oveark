@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Øveark – Versjonshistorikk</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    header a { color: #555; text-decoration: none; font-size: .9rem; }
+    header a:hover { color: #111; }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    main { max-width: 640px; margin: 0 auto; padding: 1.5rem; }
+    .loading { color: #888; font-size: .9rem; }
+    .error { color: #c00; font-size: .9rem; }
+    .entry {
+      background: #fff;
+      border-radius: 6px;
+      padding: .75rem 1rem;
+      margin-bottom: .5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+    }
+    .version {
+      font-family: monospace;
+      font-size: .85rem;
+      color: #555;
+      white-space: nowrap;
+      min-width: 5rem;
+    }
+    .message { font-size: .9rem; flex: 1; }
+    .date { font-size: .8rem; color: #aaa; white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../">← Tilbake</a>
+    <h1>Versjonshistorikk</h1>
+  </header>
+  <main>
+    <p class="loading" id="status">Laster…</p>
+    <div id="list"></div>
+  </main>
+  <script>
+    async function load() {
+      const status = document.getElementById('status');
+      const list   = document.getElementById('list');
+      try {
+        const res = await fetch(
+          'https://api.github.com/repos/TomRay74/oveark/commits?per_page=100'
+        );
+        if (!res.ok) throw new Error(res.status);
+        const commits = await res.json();
+        const total = commits.length;
+        status.style.display = 'none';
+        commits.forEach((c, i) => {
+          const version = 'v1.0.' + (total - 1 - i);
+          const msg     = c.commit.message.split('\n')[0];
+          const date    = c.commit.author.date.slice(0, 10);
+          const el      = document.createElement('div');
+          el.className  = 'entry';
+          el.innerHTML  =
+            `<span class="version">${version}</span>` +
+            `<span class="message">${escHtml(msg)}</span>` +
+            `<span class="date">${date}</span>`;
+          list.appendChild(el);
+        });
+      } catch {
+        status.className = 'error';
+        status.textContent = 'Kunne ikke hente versjonslogg. Sjekk nettverkstilgang.';
+      }
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    load();
+  </script>
+</body>
+</html>
