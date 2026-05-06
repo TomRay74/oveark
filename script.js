@@ -373,17 +373,12 @@ buildSheet();
 
 async function initVersion() {
   try {
-    let v = sessionStorage.getItem('oveark_version');
-    if (!v) {
-      const res = await fetch('https://api.github.com/repos/TomRay74/oveark/commits?per_page=1');
-      if (!res.ok) throw new Error(res.status);
-      const link = res.headers.get('Link') || '';
-      const m = link.match(/page=(\d+)>; rel="last"/);
-      const count = m ? parseInt(m[1]) : 1;
-      v = 'v1.0.' + (count - 1);
-      sessionStorage.setItem('oveark_version', v);
-    }
-    $('versionLink').textContent = v;
+    const res = await fetch('https://api.github.com/repos/TomRay74/oveark/commits?per_page=1');
+    if (!res.ok) throw new Error(res.status);
+    const link = res.headers.get('Link') || '';
+    const m = link.match(/page=(\d+)>; rel="last"/);
+    const count = m ? parseInt(m[1]) : 1;
+    $('versionLink').textContent = 'v1.0.' + (count - 1);
   } catch {
     const el = $('versionLink');
     if (el) el.style.display = 'none';
