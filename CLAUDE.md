@@ -81,6 +81,13 @@ The `lang` change listener calls `fillRandomWords()` only if the word list is em
 - **≤ 680px**: flex column — controls full-width on top, sheet below with `overflow-x: auto`
 - **≤ 400px**: form grid switches to single column
 
+## Versioning
+
+Version number is derived at runtime from the GitHub commit count via the API — no version file to maintain. Formula: oldest commit = `v1.0.0`, commit N = `v1.0.(N-1)`.
+
+- `initVersion()` in `script.js` fetches `https://api.github.com/repos/TomRay74/oveark/commits?per_page=1`, reads the `Link` header to get total commit count, and sets `#versionLink` text. Result cached in `sessionStorage` for the session. Fails silently (hides link) if offline or API unavailable.
+- `versions/index.html` — standalone page at `/oveark/versions/`. Fetches all commits (`per_page=100`), assigns version numbers, displays newest-first with date and commit subject. Has a back link to the main app.
+
 ## Analytics
 
 GoatCounter (anonymous, no cookies) loaded via `https://gc.zgo.at/count.js`. Stats at `https://tomray74.goatcounter.com`. A redirect page at `stat/index.html` sends visitors there from `/oveark/stat/`.
