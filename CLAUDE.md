@@ -55,7 +55,7 @@ Sheet-side strings (column headers, cover subtitle) also go through `t()` inside
 
 ## Language switching
 
-The `lang` change listener calls `fillRandomWords()` only if the word list is empty or every word exists in a known `wordBank` (any language). User-typed or pasted words are preserved.
+The `lang` change listener calls `fillRandomWords()` only if the word list is empty or matches `lastRandomWords` (a module-level variable set every time `fillRandomWords()` runs). This means only lists explicitly generated via the Random button in the current session are replaced — user-typed or pasted words, and words restored from `localStorage`, are always preserved.
 
 ## State shape (localStorage)
 
