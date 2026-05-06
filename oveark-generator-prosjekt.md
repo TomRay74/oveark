@@ -48,6 +48,11 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 ### Persistens
 - Alle innstillinger og ordliste lagres i `localStorage`, overlever sideoppdatering
 
+### Versjonering og statistikk
+- **Versjonsnummer** vises nederst i kontrollpanelet (f.eks. `v1.0.25`). Beregnes ved oppstart fra GitHub commit-count via API — ingen versjonsfil. Cachet i `sessionStorage`.
+- **Versjonslogg** på `/oveark/versions/` — lister alle commits med versjonsnummer og dato
+- **Besøksstatistikk** via GoatCounter (anonymt, ingen cookies) på `/oveark/stat/` (videresender til `tomray74.goatcounter.com`)
+
 ---
 
 ## Teknisk stack
@@ -55,7 +60,7 @@ GitHub: [github.com/TomRay74/oveark](https://github.com/TomRay74/oveark)
 - **Vanilla HTML + CSS + JavaScript** — ingen byggsteg, ingen npm
 - **Google Fonts CDN** — `Patrick Hand` for sporingsbokstaver (lastet i `<head>`)
 - **html2canvas + jsPDF** — lastet lazy fra jsDelivr CDN kun ved PDF-eksport
-- Filstruktur: `index.html`, `style.css`, `script.js`
+- Filstruktur: `index.html`, `style.css`, `script.js`, `stat/index.html`, `versions/index.html`
 - Åpnes direkte i nettleser (dobbeltklikk på `index.html`)
 - Publisert via GitHub Pages
 
