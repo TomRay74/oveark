@@ -34,6 +34,7 @@ const TRANSLATIONS = {
     btnGenerate:         'Generer ark',
     btnPrint:            'Skriv ut',
     pdfError:            'PDF-eksport feilet',
+    usageLink:           'Hjelp',
     defaultTitle:        'Øveark: Rettskriving',
     defaultInstruction:  'Skriv én bokstav i hver rute.',
     sheetWordHeader:     'Ord',
@@ -81,6 +82,7 @@ const TRANSLATIONS = {
     btnGenerate:         'Generate sheet',
     btnPrint:            'Print',
     pdfError:            'PDF export failed',
+    usageLink:           'Help',
     defaultTitle:        'Worksheet: Spelling',
     defaultInstruction:  'Write one letter in each box.',
     sheetWordHeader:     'Word',
@@ -368,8 +370,20 @@ $('printBtn').addEventListener('click', () => window.print());
 
 /* ── Init ── */
 loadState();
+applyQueryParams();
 applyLanguage();
 buildSheet();
+
+function applyQueryParams() {
+  const p = new URLSearchParams(location.search);
+  if (p.has('lang'))    $('lang').value        = p.get('lang');
+  if (p.has('style'))   $('style').value       = p.get('style');
+  if (p.has('columns')) $('columns').value     = p.get('columns');
+  if (p.has('boxSize')) $('boxSize').value     = p.get('boxSize');
+  if (p.has('trace'))   $('trace').checked     = p.get('trace') !== '0';
+  if (p.has('title'))   $('title').value       = p.get('title');
+  if (p.has('w'))       $('words').value       = p.get('w').split(',').map(s => s.trim()).filter(Boolean).join('\n');
+}
 
 async function initVersion() {
   try {

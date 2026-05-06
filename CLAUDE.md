@@ -21,6 +21,7 @@ Three files, no modules:
 - **`script.js`** — all logic. Key sections:
   - `TRANSLATIONS` object — all UI strings + `wordBank` arrays per language (`no`, `en`). Adding a language = one new key here + one `<option>` in HTML.
   - `applyLanguage()` — updates all `[data-i18n]` elements, placeholder, and default title/instruction if still at a known default.
+  - `applyQueryParams()` — runs after `loadState()` on init; reads `URLSearchParams` and overrides form fields without writing to `localStorage`. Supported params: `w` (words, comma-separated), `lang`, `style`, `columns`, `boxSize`, `trace`, `title`.
   - `buildCoverPage()` / `buildSheet()` — pure string builders, return HTML injected into `#sheet`.
   - `saveState()` / `loadState()` — full settings persistence via `localStorage`. `loadState` wraps `JSON.parse` in try/catch and clears corrupt entries.
   - `savePDF()` — lazy-loads html2canvas + jsPDF from jsDelivr CDN on first call, captures each `.sheet-page` as a canvas and assembles an A4 landscape PDF. Wrapped in try/finally — button always re-enables; errors shown in button text for 3 s.
@@ -80,6 +81,28 @@ The `lang` change listener calls `fillRandomWords()` only if the word list is em
 - **> 680px**: flex row — sticky controls sidebar (280px) + scrollable sheet area
 - **≤ 680px**: flex column — controls full-width on top, sheet below with `overflow-x: auto`
 - **≤ 400px**: form grid switches to single column
+
+## URL parameters
+
+`applyQueryParams()` in `script.js` allows pre-configuring a worksheet via the URL for sharing. Runs on page load after `loadState()`, so query params override localStorage without polluting it.
+
+| Param | Values | Effect |
+|-------|--------|--------|
+| `w` | words, comma-separated | fills word list |
+| `lang` | `no`, `en` | sets language |
+| `style` | `boxes`, `lines`, `bare` | sets strip style |
+| `columns` | number | sets column count |
+| `boxSize` | cm value | sets box size |
+| `trace` | `1` / `0` | enables/disables trace mode |
+| `title` | text | sets worksheet title |
+
+## Sub-pages
+
+All sub-pages are standalone HTML files (self-contained CSS/JS, no shared assets). Internal links use explicit `index.html` filenames so they work under `file://` as well as a web server.
+
+- **`versions/index.html`** — version history. Fetches GitHub API, assigns `v1.0.N` numbers, displays newest-first.
+- **`usage/index.html`** — bilingual (NO/EN) usage guide documenting all features and URL parameters. Language choice persisted in `localStorage` under key `usage_lang`.
+- **`stat/index.html`** — redirect to GoatCounter analytics dashboard.
 
 ## Versioning
 
